@@ -1,0 +1,35 @@
+<!-- res/layout-v21/fragment_crime_list.xml -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/emptySearchables"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="16dp"
+        android:text="@string/consider_adding_new_searchable"/>
+
+    <ListView
+        android:id="@+id/searchables"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    </ListView>
+
+    <ImageButton
+        android:id="@+id/add_button"
+        android:layout_width="@dimen/round_button_diameter"
+        android:layout_height="@dimen/round_button_diameter"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="@dimen/add_button_margin"
+        android:layout_marginEnd="@dimen/add_button_margin"
+        android:background="@drawable/oval_ripple"
+        android:elevation="@dimen/elevation_low"
+        android:src="@android:drawable/ic_input_add"
+        android:tint="@android:color/white"
+
+        />
+
+</FrameLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="error_message_color">#FF6E0013</color>
+    <color name="button_color">@color/material_deep_teal_500</color>
+    <color name="background_emphasis_color">@color/background_material_dark</color>
+    <color name="font_emphasis_color">@color/abc_primary_text_material_dark</color>
+    <color name="hint_emphasis_color">@color/hint_foreground_material_dark</color>
+
+</resources>
