@@ -14,5 +14,8 @@
     <string name="title_activity_searchable_detail">SearchableDetailActivity</string>
 
     <string name="no_searchable_selected">No searchable selected</string>
+    <string name="confirm_delete_searchable">Are you sure?</string>
+    <string name="confirm_delete_searchable_positive">Yes</string>
+    <string name="confirm_delete_searchable_negative">No</string>
 
 </resources>
