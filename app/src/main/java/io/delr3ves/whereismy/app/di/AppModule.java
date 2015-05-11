@@ -6,10 +6,11 @@ import dagger.Module;
 import dagger.Provides;
 import io.delr3ves.whereismy.app.WhereismyApplication;
 import io.delr3ves.whereismy.app.business.model.Searchable;
-import io.delr3ves.whereismy.app.dao.DBHelper;
-import io.delr3ves.whereismy.app.dao.SearchableDao;
-import io.delr3ves.whereismy.app.dao.SearchableDaoOrmLiteImpl;
+import io.delr3ves.whereismy.app.business.model.TrackedLocation;
+import io.delr3ves.whereismy.app.dao.*;
 import io.delr3ves.whereismy.app.receiver.BluetoothDisconnectionReceiver;
+import io.delr3ves.whereismy.app.service.TrackedLocationService;
+import io.delr3ves.whereismy.app.service.TrackedLocationServiceImpl;
 import io.delr3ves.whereismy.app.ui.AddSearchableFragment;
 import io.delr3ves.whereismy.app.ui.ListSearchablesFragment;
 import io.delr3ves.whereismy.app.ui.SearchableDetailActivity;
@@ -60,8 +61,25 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public SearchableDao provideSearchableDao(Dao<Searchable, Long> ormLiteDao) {
-        return new SearchableDaoOrmLiteImpl(ormLiteDao);
+    public Dao<TrackedLocation, Long> provideTrackedLocationDao(DBHelper dbHelper) {
+        return dbHelper.getTrackedLocationDaoDao();
     }
 
+    @Provides
+    @Singleton
+    public SearchableDao provideSearchableDao(Dao<Searchable, Long> ormLiteDao, Context context) {
+        return new SearchableDaoOrmLiteImpl(ormLiteDao, context);
+    }
+
+    @Provides
+    @Singleton
+    public TrackedLocationDao provideTrackedLocationDao(Dao<TrackedLocation, Long> ormLiteDao, Context context) {
+        return new TrackedLocationDaoOrmLiteImpl(ormLiteDao, context);
+    }
+
+    @Provides
+    @Singleton
+    public TrackedLocationService provideTrackedLocationService(SearchableDao searchableDao, TrackedLocationDao trackedLocationDao) {
+        return new TrackedLocationServiceImpl(searchableDao, trackedLocationDao);
+    }
 }

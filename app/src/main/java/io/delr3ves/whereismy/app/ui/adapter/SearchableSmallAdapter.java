@@ -39,6 +39,9 @@ public class SearchableSmallAdapter extends ArrayAdapter<Searchable> {
         TextView description = (TextView) v.findViewById(R.id.searchable_description);
         description.setText(searchable.getDescription());
 
+        TextView lastLocated = (TextView) v.findViewById(R.id.searchable_last_located);
+        lastLocated.setText(new Integer(searchable.getLocations().size()).toString());
+
         return v;
     }
 }

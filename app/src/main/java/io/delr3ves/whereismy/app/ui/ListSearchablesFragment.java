@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 import io.delr3ves.whereismy.app.R;
 import io.delr3ves.whereismy.app.WhereismyApplication;
 import io.delr3ves.whereismy.app.business.model.Searchable;
@@ -19,7 +22,6 @@ import io.delr3ves.whereismy.app.dao.SearchableDao;
 import io.delr3ves.whereismy.app.ui.adapter.SearchableSmallAdapter;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.delr3ves.whereismy.app.ui.SearchableDetailActivity.SEARCHABLE_EXTRA;
@@ -53,15 +55,23 @@ public class ListSearchablesFragment extends Fragment {
             }
         };
 
+        final SearchableSmallAdapter searchablesAdapter =
+                new SearchableSmallAdapter(getActivity(), R.layout.searchable_small_item, searchables);
 
+        configureSearchableList(v, addNewSearchableListener, searchablesAdapter);
+        configureAddNewSearchableButton(v, addNewSearchableListener);
+        cofigurePullToRefresh(v, searchablesAdapter);
+
+        return v;
+    }
+
+    private void configureSearchableList(View v, View.OnClickListener addNewSearchableListener, SearchableSmallAdapter searchablesAdapter) {
         ListView searchablesView = (ListView) v.findViewById(R.id.searchables);
+        searchablesView.setAdapter(searchablesAdapter);
         View emptySearchablesView = v.findViewById(R.id.emptySearchables);
         emptySearchablesView.setOnClickListener(addNewSearchableListener);
 
         searchablesView.setEmptyView(emptySearchablesView);
-        final SearchableSmallAdapter searchablesAdapter = new SearchableSmallAdapter(getActivity(), R.layout.searchable_small_item, searchables);
-        searchablesView.setAdapter(
-                searchablesAdapter);
 
         searchablesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -72,12 +82,35 @@ public class ListSearchablesFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
 
+    private void configureAddNewSearchableButton(View v, View.OnClickListener addNewSearchableListener) {
         View addButton = v.findViewById(R.id.add_button);
         makeRoundButton(addButton);
         addButton.setOnClickListener(addNewSearchableListener);
+    }
 
-        return v;
+    private void cofigurePullToRefresh(View v, final SearchableSmallAdapter searchablesAdapter) {
+        PtrFrameLayout ptrFrameLayout = (PtrFrameLayout) v.findViewById(R.id.searchables_ptr_list);
+        ptrFrameLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout ptrFrameLayout, View view, View view1) {
+                return true;
+            }
+
+            @Override
+            public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
+                Toast.makeText(getActivity(), "refreshing", Toast.LENGTH_SHORT).show();
+                refreshSearchables();
+                searchablesAdapter.notifyDataSetChanged();
+                ptrFrameLayout.refreshComplete();
+            }
+        });
+    }
+
+    private void refreshSearchables() {
+        searchables.removeAll(searchables);
+        searchables.addAll(searchableDao.findSearchables());
     }
 
 

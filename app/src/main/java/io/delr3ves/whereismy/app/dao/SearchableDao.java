@@ -13,7 +13,9 @@ public interface SearchableDao {
 
     List<Searchable> findByDeviceId(String deviceId);
 
-    Searchable save(Searchable searchable);
+    Searchable create(Searchable searchable);
+
+    Searchable update(Searchable searchable);
 
     void delete(Searchable searchable);
 

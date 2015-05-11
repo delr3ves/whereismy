@@ -110,7 +110,7 @@ public class AddSearchableFragment extends Fragment {
                     Toast.makeText(getActivity(), "Fill all mandatory fields", Toast.LENGTH_LONG).show();
                     return;
                 }
-                searchableDao.save(searchable);
+                searchableDao.create(searchable);
                 getActivity().finish();
             }
         });
